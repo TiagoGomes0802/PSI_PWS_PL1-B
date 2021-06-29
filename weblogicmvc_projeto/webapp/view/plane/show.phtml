@@ -1,0 +1,35 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('gestorvooheader');
+
+$aviao = Data::get('plane');
+
+
+?>
+
+<!--fazer o resto da pag e usar foreach para obter os dados dos aeroportos-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Marca: <?php echo $aviao->marca ?></h1>
+        </div>
+        <div class="col-12">
+            <h1>Modelo: <?php echo $aviao->modelo ?></h1>
+        </div>
+        <div class="col-12">
+            <h1>Nr Passageiros: <?php echo $aviao->npassageiros ?></h1>
+        </div>
+        <div class="col-12">
+            <h1>Referencia: <?php echo $aviao->referencia ?></h1>            
+        </div>     
+        <br>   
+        <a href="<?= URL::toRoute('plane/edit', $aviao->id) ?>" class="btn btn-primary">Editar</a>     
+        <a href="<?= URL::toRoute('plane/destroy', $aviao->id) ?>" class="btn btn-danger">Apagar</a>             
+    </div>
+</div>

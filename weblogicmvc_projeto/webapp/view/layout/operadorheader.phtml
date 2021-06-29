@@ -1,0 +1,80 @@
+<?php
+use ArmoredCore\WebObjects\Asset;
+use ArmoredCore\Facades\AssetBundler;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\URL;
+
+$idUser = authManager::getLoggedID();
+$user = User::find([$idUser]);
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"    content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author"      content="Silvio Priem Mendes, PhD">
+
+    <title>Flight Travel Air</title>
+
+    <?=AssetBundler::css()?>
+
+    <link rel="shortcut icon" href="<?= Asset::image('gt_favicon.png')?>">
+    <link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Custom styles for our site template -->
+    <link rel="stylesheet" href="<?= Asset::css('/bootstrap-theme.css')?>" media="screen" >
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="<?= Asset::js('html5shiv.js')?>"></script>
+    <script src="<?= Asset::js('respond.min.js')?>"></script>
+    <![endif]-->
+</head>
+
+<style>
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+
+<body class="home">
+<!-- Fixed navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+    <div class="container">
+        <div class="navbar-header">
+            <!-- Button for smallest screens -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+            <a class="navbar-brand" href="<?= URL::toRoute('operadorapp/index')?>"><img src="<?= Asset::image('logopws.png')?>" alt="Flight Travel Air" height="50px"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown"> 
+                  <span style="color: white;"> <?php echo $user->username ?> </span>
+                  <div class="dropdown-content">
+                    <a href="<?= URL::toRoute('user/edit', $user->id) ?>">Editar</a><br>
+                    <a href="<?= URL::toRoute('login/logout') ?>">LogOut</a>
+                  </div>
+                </li>                         
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</div>
+<!-- /.navbar -->
+<header id="head" class="secondary"></header>

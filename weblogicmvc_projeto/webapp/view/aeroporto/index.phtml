@@ -1,0 +1,47 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('adminheader');
+
+$aeroportos = Data::get('aeroportos');
+
+?>
+
+<!--fazer o resto da pag e usar foreach para obter os dados dos aeroportos-->
+
+<style>
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<div class="container">
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Cidade</th>
+            <th>Pais</th>
+        </tr>
+        <?php foreach($aeroportos as $item){ ?>
+            <tr>                
+                <td> <a href="<?=URL::toRoute('aeroporto/show', $item->id) ?> "> <?php echo $item->nome ?> </a> </td>  
+                <td> <?php echo $item->cidade ?> </td>
+                <td> <?php echo $item->pais ?> </td>                                        
+            </tr>
+        <?php } ?>
+    </table>
+    <br>   
+    <a href="<?= URL::toRoute('aeroporto/create') ?>" class="btn btn-primary">Criar Aeroporto</a>   
+</div>

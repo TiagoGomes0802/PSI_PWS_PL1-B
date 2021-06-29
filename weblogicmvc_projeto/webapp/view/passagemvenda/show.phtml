@@ -1,0 +1,216 @@
+<?php
+
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//obter o utilizador
+$idUser = authManager::getLoggedID();
+$user = User::find([$idUser]);
+
+//***************INCLUIR O LAYOUT*****
+if($user->role == 'operador'){
+    Layout::includeLayout('operadorheader');
+}else if($user->role == 'passageiro'){
+    Layout::includeLayout('passageiroheader');
+}
+
+$passagem = Data::get('passagem');
+$vooida = Voo::find_by_idVoo($passagem->idvooida);
+$voovolta = null;
+
+$escalasida = Escala::find_all_by_idVoo($passagem->idvooida); 
+$escalasvolta = null;
+
+
+
+if(is_null($passagem->idvoovolta)){
+    //passageiro nao tem voo de volta
+}else{
+    //passageiro tem voo de volta
+    $voovolta = Voo::find_by_idvoo($passagem->idvoovolta);
+    $escalasvolta = Escala::find_all_by_idVoo($passagem->idvoovolta);
+}
+
+$cont = 0; //conta o nr de escalas
+$contV = 0; //conta o nr de escalas de volta
+?>
+
+<div class="container">
+
+    <div class="row">
+        <h1>Ida</h1>
+        <?php foreach ($escalasida as $escalaida) { ?>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <h3>
+                    <?php 
+                        if($cont == 0){
+                            echo 'Origem: ';
+                        }else{
+                            echo 'Escala '. $cont . ': ';
+                        }
+                        $aeroportoOrigem = Aeroporto::find_by_idAeroporto($escalaida->idaeroportoorigem);
+                        echo $aeroportoOrigem->nome; 
+                    ?>
+                </h3>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                <p>
+                    <h3>
+                        <?php 
+                            if($cont == 0){
+                                echo date_format($escalaida->data_hora_origem, 'd-m-Y');
+                            }
+                            $cont++;
+                        ?>
+                    </h3>
+                </p>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                <p>
+                    <h3>
+                        <?php 
+                            echo date_format($escalaida->data_hora_origem, 'H:i');
+                        ?>
+                    </h3>
+                </p>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <p>
+                    <h3>
+                        <?php 
+                            $planeida = EscalaPlane::find_by_idescala($escalaida->idescala);                               
+                            $plane = Plane::find_by_idaviao($planeida->idaviao);
+                            echo $plane->modelo;
+                        ?>
+                    </h3>
+                </p>
+            </div>
+
+        <?php } ?>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <p>
+                <h3>Destino: 
+                    <?php 
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($escalaida->idaeroportodestino);
+                        echo $aeroportoDestino->nome; 
+                    ?>
+                </h3>
+            </p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <p>
+                <h3>Dia:
+                    <?php 
+                        echo date_format($escalaida->data_hora_destino, 'd-m-Y');
+                    ?>
+                </h3>
+            </p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <p>
+                <h3>Hora prevista:
+                    <?php 
+                        echo date_format($escalaida->data_hora_destino, 'H:i');
+                    ?>
+                </h3>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <h1>Volta</h1> 
+            <?php foreach ($escalasida as $escalavolta) { ?>
+                <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+                    <h3>                             
+                        <?php 
+                            if($contV == 0){
+                                echo 'Origem: ';
+                            }else{
+                                echo 'Escala '. $contV . ': ';
+                            }
+                            $aeroportoOrigem = Aeroporto::find_by_idAeroporto($escalavolta->idaeroportoorigem);
+                            echo $aeroportoOrigem->nome;   
+                        ?>                  
+                    </h3>
+                </div>                   
+                <div class='col-xs-2 col-sm-2 col-md-2 col-lg-2'>
+                    <p>
+                        <h3>
+                            <?php       
+                                if($contV == 0){
+                                    echo date_format($escalavolta->data_hora_origem, 'd-m-Y');
+                                }
+                                $contV++;   
+                            ?>                                 
+                        </h3>
+                    </p>
+                </div>
+                <div class='col-xs-1 col-sm-1 col-md-1 col-lg-1'>
+                    <p>
+                        <h3>
+                            <?php                                    
+                                echo date_format($escalavolta->data_hora_origem, 'H:i');
+                            ?>        
+                        </h3>
+                    </p>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <p>
+                    <h3>
+                        <?php 
+                            $planeida = EscalaPlane::find_by_idescala($escalaida->idescala);                               
+                            $plane = Plane::find_by_idaviao($planeida->idaviao);
+                            echo $plane->modelo;
+                        ?>
+                    </h3>
+                </p>
+            </div>
+            <?php } ?>   
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <p>
+                <h3>Destino: 
+                    <?php 
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($escalaida->idaeroportodestino);
+                        echo $aeroportoDestino->nome; 
+                    ?>
+                </h3>
+            </p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <p>
+                <h3>Dia:
+                    <?php 
+                        echo date_format($escalaida->data_hora_destino, 'd-m-Y');
+                    ?>
+                </h3>
+            </p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <p>
+                <h3>Hora prevista:
+                    <?php 
+                        echo date_format($escalaida->data_hora_destino, 'H:i');
+                    ?>
+                </h3>
+            </p>
+        </div>   
+    </div>
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <h2>Checkin: <?php echo $passagem->checkin; ?></h2>
+        </div> 
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <h2>Preço: <?php echo $passagem->preco . '€'; ?></h2>
+        </div> 
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <?php 
+                if($user->role == 'operador'){?>
+                    <a href="<?= URL::toRoute('operadorapp/index') ?>" class="btn btn-danger">Voltar</a>
+                <?php }else if($user->role == 'passageiro'){ ?>
+                    <a href="<?= URL::toRoute('passageiroapp/index') ?>" class="btn btn-danger">Voltar</a>
+                <?php }
+            ?>
+        </div> 
+    </div>                           
+</div>

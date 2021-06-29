@@ -1,0 +1,85 @@
+<?php
+
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('passageiroheader');
+
+
+
+$idUser = authManager::getLoggedID();
+
+$passagens = PassagemVenda::find_all_by_idutilizador($idUser);
+
+?>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<div class="container">
+    <table>
+        <tr>
+            <br>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Preço</th>
+        </tr>
+        <?php foreach ($passagens as $passagem) { ?>
+            <tr>
+                <td>
+                    <?php
+                        $voo = Voo::find_by_idvoo($passagem->idvooida);
+                        $aeroportoOrigem = Aeroporto::find_by_idAeroporto($voo->idaeroportoorigem);
+                        echo $aeroportoOrigem->nome;                        
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($voo->idaeroportodestino);
+                        echo $aeroportoDestino->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo $voo->preco . '€';
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php
+
+                        $voo = Voo::find_by_idvoo($passagem->idvoovolta);
+                        $aeroportoOrigem = Aeroporto::find_by_idAeroporto($voo->idaeroportoorigem);
+                        echo $aeroportoOrigem->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($voo->idaeroportodestino);
+                        echo $aeroportoDestino->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo $voo->preco . '€';
+                    ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>

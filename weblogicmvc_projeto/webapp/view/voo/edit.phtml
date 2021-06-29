@@ -1,0 +1,73 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('gestorvooheader');
+
+$voos = Data::get('voo');
+$aeroportos = Data::get('aeroportos');
+
+$aeroportoOrigem = Aeroporto::find_by_idAeroporto($voos->idaeroportoorigem);
+$aeroportoidOrigem = Aeroporto::find_by_Nome($aeroportoOrigem->nome);
+
+$aeroportoDestino = Aeroporto::find_by_idAeroporto($voos->idaeroportodestino);
+$aeroportoidDestino = Aeroporto::find_by_Nome($aeroportoDestino->nome);
+
+Debug::barDump('yolo');
+Debug::barDump($aeroportos);
+?>
+
+<div class="container">
+    <div class="row">
+        <form action="<?=URL::toRoute('voo/update', $voos-> id) ?>" method="post">
+
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <br>
+                <label for="idAeroportoOrigem" class="form-label">Aeroporto Origem</label>
+                <input type="text" disabled class="form-control" id="idAeroportoOrigem" value="<?php $aeroportoOrigem = Aeroporto::find_by_idAeroporto($voos->idaeroportoorigem); echo $aeroportoOrigem->nome;
+
+                ?>">
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <br>
+                <label for="idAeroportoOrigem" class="form-label">Aeroporto Destino</label>
+                <input type="text" disabled class="form-control" id="idAeroportoDestino" value="<?php $aeroportoDestino = Aeroporto::find_by_idAeroporto($voos->idaeroportodestino); echo $aeroportoDestino->nome;
+                ?>">
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <br>
+                <label for="idAeroportoOrigem" class="form-label">Preço</label>
+                <input type="text" class="form-control" id="preco" name="preco" value="<?php echo $voos->preco;
+                ?>">
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <br>
+                <label for="idAeroportoOrigem" class="form-label">Distancia</label>
+                <input type="text" class="form-control" id="distancia" name="distancia" value="<?php echo $voos->distancia;
+                ?>">
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <br>
+                <label for="idAeroportoOrigem" class="form-label">Duracao</label>
+                <input type="text" class="form-control" id="duracao" name="duracao" value="<?php echo $voos->duracao;
+                ?>">
+            </div>
+
+            <input type="text" name="idAeroportoOrigem" value="<?php  echo $aeroportoidOrigem->idaeroporto?>" hidden>
+            <input type="text" name="idAeroportoDestino" value="<?php echo $aeroportoidDestino->idaeroporto?>" hidden>
+
+            <div class="col-12 text-right">
+                <br><br>
+                <button class="btn btn-action" type="submit">Criar</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>

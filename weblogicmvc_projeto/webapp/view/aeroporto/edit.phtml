@@ -1,0 +1,60 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('adminheader');
+
+$aeroporto = Data::get('aeroporto');
+
+$path = "C:\wamp64\www\weblogicmvc_projeto\webapp\paises.php";
+$countries = include($path);
+
+?>
+
+<style>
+    .textoPreto{
+        color:"black";
+        width: 100%;
+    }
+</style>
+
+<!--fazer o resto da pag e usar foreach para obter os dados dos aeroportos-->
+
+
+<div class="container">
+    <div class="row">
+        <form action="<?php URL::toRoute('aeroporto/update', $aeroporto->id) ?>" method="post">        
+            <!--************************************************** PAIS ****************************************************************************************-->
+            <div class="col-12">
+                <br>
+                <h1><label for="origem" class="form-label", style="color:black;">Pais</label></h1>                
+                <select name="pais" id="pais" required style="font-size:22px;">
+                    <option selected value> <?=$aeroporto->pais ?> </option>                    
+                    <?php foreach($countries as $country){?>
+                        <option value="<?=$country?>"><?=$country?></option>
+                        
+                    <?php }?>
+                </select>                               
+            </div>
+            <div class="col-12" >
+                <h1 style="color:black"><label for="destino" class="form-label" style="color:black;"    >Cidade</label>
+                <input type="text" class="form-control, textoPreto" id="cidade" name="cidade" value="<?=$aeroporto->cidade ?>"></h1>                
+            </div>
+            <div class="col-12">
+                <h1><label for="destino" class="form-label" style="color:black;">Morada</label>
+                <input type="text" class="form-control, textoPreto" id="morada" name="morada" value="<?=$aeroporto->morada ?>"></h1>                
+            </div>
+            <div class="col-12">
+                <h1><label for="destino" style="color:black;" class="form-label">Nome</label>
+                <input type="text" class="form-control, textoPreto" id="nome" name="nome" value="<?= $aeroporto->nome ?>"> </h1>                
+                <br>  
+            </div>            
+            <div class="text-right">             
+                <button class="btn btn-action" type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

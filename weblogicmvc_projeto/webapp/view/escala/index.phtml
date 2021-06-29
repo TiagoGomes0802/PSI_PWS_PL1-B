@@ -1,0 +1,78 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+use function Composer\Autoload\includeFile;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('gestorvooheader');
+
+$escalas = Data::get('escalas');
+Debug::barDump($escalas);
+
+?>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<div class="container">
+    <table>
+        <tr>
+            <br>
+            <th>idVoo</th>
+            <th>Origem</th>
+            <th>Dia/Hora</th>
+            <th>Destino</th>
+            <th>Dia/Hora</th>
+        </tr>
+        <?php foreach ($escalas as $escala) { ?>
+            <tr>
+                <td>
+                    <?php
+                        $voo = Voo::find_by_idvoo($escala->idvoo);
+                        echo $voo->idvoo;
+                    ?>
+                </td>
+                <td>
+                    <?php
+
+                        $aeroportoOrigem = Aeroporto::find_by_idAeroporto($escala->idaeroportoorigem);
+                        echo $aeroportoOrigem->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo date_format($escala->data_hora_origem, 'd-m-Y H:i');
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($escala->idaeroportodestino);
+                        echo $aeroportoDestino->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo date_format($escala->data_hora_destino, 'd-m-Y H:i');
+                    ?>
+                </td>
+                <td>
+                    <a href="<?= URL::toRoute('escala/edit', $escala->idescala) ?>" class="btn btn-primary">Editar</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>

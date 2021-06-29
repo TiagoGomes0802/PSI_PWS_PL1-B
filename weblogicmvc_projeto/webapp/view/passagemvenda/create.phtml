@@ -1,0 +1,136 @@
+<?php
+
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('passageiroheader');
+
+
+$voo = Data::get('voo');
+$escalas = Data::get('escalas');
+
+$cont = 0; // conta o nr de escalas para mostrar ao utilizador
+
+$idUser = authManager::getLoggedID();
+$user = User::find([$idUser]);
+
+?>
+
+<div class="container">
+
+    <?php foreach ($escalas as $escala) { ?>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <p>
+                    <h3>                      
+                        <?php 
+                            if($cont == 0){
+                                echo 'Origem: ';
+                            }else{
+                                echo 'Escala '. $cont . ': ';
+                            }
+                            $aeroportoOrigem = Aeroporto::find_by_idAeroporto($escala->idaeroportoorigem);
+                            echo $aeroportoOrigem->nome; 
+                            
+                        ?>
+                    </h3>
+                </p>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <p>
+                    <h3>
+                        <?php 
+                            if($cont == 0){
+                                echo 'Dia: ' .date_format($escala->data_hora_origem, 'd-m-Y');
+                            }else{
+                            }
+
+                            $cont++;
+                        ?>
+                    </h3>
+                </p>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <p>
+                    <h3>Hora:
+                        <?php 
+                            echo date_format($escala->data_hora_origem, 'H:i');
+                        ?>
+                    </h3>
+                </p>
+            </div>
+        </div>
+    <?php } ?>
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <p>
+                <h3>Destino: 
+                    <?php 
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($voo->idaeroportodestino);
+                        echo $aeroportoDestino->nome; 
+                    ?>
+                </h3>
+            </p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <p>
+                <h3>Dia:
+                    <?php 
+                        echo date_format($escala->data_hora_destino, 'd-m-Y');
+                    ?>
+                </h3>
+            </p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <p>
+                <h3>Hora prevista:
+                    <?php 
+                        echo date_format($escala->data_hora_destino, 'H:i');
+                    ?>
+                </h3>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+    <br><br>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <p>Distancia Total: <?php echo $voo->distancia . 'Km'; ?></p>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <p>Preço: <?php echo $voo->preco . '€'; ?></p>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <p>Tempo total: <?php 
+                                $minutos = $voo->duracao;
+                                $horas = floor($minutos / 60);
+                                $minutos = $minutos % 60;
+                                echo $horas . 'h ' . $minutos . 'm'; 
+                            ?>
+            </p>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+
+        <form action="<?=URL::toRoute('passagemvendas/store') ?>" method="post">   
+            <div class="text-right">
+                <input type="text" name="idutilizador" value="<?php echo $user->id ?>" hidden>
+                <input type="text" name="idvooida" value="<?php echo $escala->idvoo ?>" hidden>
+                <input type="text" name="preco" value="<?php echo $voo->preco ?>" hidden>   
+                <input type="text" name="checkin" value="nao_concluido" hidden>                
+            </div>
+            <div class="text-right">                            
+                <button class="btn btn-action" type="submit">Pagar</button>
+            </div>
+        </form>                   
+
+
+
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <a href="<?= URL::toRoute('voo/create') ?>" class="btn btn-danger">Cancelar</a> 
+        </div>
+    </div>    
+</div>
+

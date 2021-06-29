@@ -1,0 +1,67 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('gestorvooheader');
+$escala = Data::get('escala');
+
+$airportOrigem = Aeroporto::find_by_idAeroporto($escala->idaeroportoorigem);
+$airportDestino = Aeroporto::find_by_idAeroporto($escala->idaeroportodestino);
+
+$aeroportos = Data::get('aeroportos');
+
+?>
+
+<div class="container">
+    <div class="row">
+        <form action="<?=URL::toRoute('escala/update') ?>" method="post">
+        <br>
+            <!--************************************************** AEROPORTO DE ORIGEM ****************************************************************************************-->
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="origem" class="form-label">Aeroporto de origem</label>
+                <select name="idaeroportoorigem" id="idaeroportoorigem" required>
+                    <option value= "<?php $airportOrigem->id ?>" selected><?php echo $airportOrigem->nome ?></option>
+                    <?php foreach($aeroportos as $aeroporto){?>
+                        <option value="<?=$aeroporto->id?>"><?=$aeroporto->nome?></option>
+                    <?php }?>
+                </select>                               
+            </div>
+            <!--************************************************** AEROPORTO DE DESTINO ****************************************************************************************-->
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="destino" class="form-label">Aeroporto de destino</label>
+                <select name="idaeroportodestino" id="idaeroportodestino" required>
+                    <option selected value="<?php $airportDestino->id?>"><?php echo $airportDestino->nome ?> </option>
+                    <?php foreach($aeroportos as $aeroporto){?>
+                        <option value="<?=$aeroporto->id?>"><?=$aeroporto->nome?></option>
+                    <?php }?>
+                </select>
+            </div>       
+            <!--************************************************** DISTANCIA ****************************************************************************************-->             
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <label for="distancia" class="form-label text-align:center;">Distância</label>
+                    <input type="text" class="form-control text-align:center;" id="distancia" name="distancia" required value="<?php echo $escala->distancia?>"> 
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+            </div>
+            <!--************************************************** DIA DE PARTIDA ****************************************************************************************-->
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="origem" class="form-label">Dia de partida</label>
+                <input type="date" class="form-control" id="origem" name="origem" value="<?php date_format($escala->data_hora_destino, 'd-m-Y'); ?>" min="<?php echo date('Y-m-d') ?>">                                                                      
+            </div> 
+            <!--************************************************** DIA DE REGRESSO ****************************************************************************************-->
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="destino" class="form-label">Dia de regresso</label>
+                <input type="date" class="form-control" id="destino" name="destino" min="<?php echo date('Y-m-d') ?>" required value="12-03-2000">   
+            </div>
+            <div class="text-right">
+            <br><br>
+                <button class="btn btn-action" type="submit">Criar</button>
+            </div>
+        </form>
+    </div>
+</div>

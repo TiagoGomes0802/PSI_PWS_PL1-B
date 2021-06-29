@@ -1,0 +1,18 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('adminheader');
+
+?>
+
+<!--fazer o resto da pag e usar foreach para obter os dados dos aeroportos-->
+
+
+
+<div class="container">
+    <a href="<?= URL::toRoute('aeroporto/create') ?>" >Criar Aeroporto</a>   
+</div>

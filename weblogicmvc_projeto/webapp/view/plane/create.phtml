@@ -1,0 +1,64 @@
+<?php
+
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+use function Composer\Autoload\includeFile;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('gestorvooheader');
+
+$planes = include("C:\wamp64\www\weblogicmvc_projeto\webapp\avioes_marcas.php");
+$airbus_planes = include("C:\wamp64\www\weblogicmvc_projeto\webapp\airbus_planes.php");
+$atr_planes = include("C:\wamp64\www\weblogicmvc_projeto\webapp\atr_planes.php");
+$boeing_planes = include("C:\wamp64\www\weblogicmvc_projeto\webapp\boeing_planes.php");
+$bombardier_planes = include("C:\wamp64\www\weblogicmvc_projeto\webapp\bombardier_planes.php");
+$dash_planes = include("C:\wamp64\www\weblogicmvc_projeto\webapp\dash_planes.php");
+//$embraer_planes = include("C:\wamp64\www\weblogicmvc_projeto\webapp\embraer_planes.php");
+
+?>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script>
+    //obtem o valor da dropdown
+    $(document).ready(function() {
+        $("select.marca").change(function() {
+            var marca = $(this).children("option:selected").val();            
+        });
+    });
+</script>
+<div class="container">
+    <div class="row">
+        <form action="<?= URL::toRoute('plane/store') ?>" method="post">
+            <!--************************************************** AVIOES ****************************************************************************************-->
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <br>
+                <label for="origem" class="form-label">Marca</label>
+                <select name="marca" id="marca" class="marca" required>
+                    <option disabled selected value> -- select an option -- </option>
+                    <?php foreach ($planes as $plane) { ?>
+                        <option value="<?= $plane ?>"><?= $plane ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="modelo" class="form-label">Modelo</label>
+                <input type="text" class="form-control" id="modelo" name="modelo">                
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="npassageiros" class="form-label">Nr Passageiros</label>
+                <input type="text" class="form-control" id="npassageiros" name="npassageiros">
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="referencia" class="form-label">Referencia</label>
+                <input type="text" class="form-control" id="referencia" name="referencia">
+                <br>
+            </div>
+            <div class="text-right">
+                <button class="btn btn-action" type="submit">Criar</button>
+            </div>
+        </form>
+    </div>
+</div>

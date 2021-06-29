@@ -1,0 +1,110 @@
+<?php
+
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('passageiroheader');
+
+$voos = Data::get('voos');
+
+?>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+}
+
+    .search-container button {
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+input[type=text], .search-container button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+
+input[type=text] {
+    border: 1px solid #ccc;  
+  }
+
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="search-container">
+            <form action="<?= URL::toRoute('passageiroapp/show') ?>" method="GET">
+                <br>
+                <div class="form-group"> 
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        <input type="text" placeholder="Procurar.." name="search">
+                        <small class="text-muted">Procurar pais para destino</small>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                        <button type="submit"><i class="fa fa-search"></i> &nbsp; Procurar</button>
+                    </div>    
+                </div>          
+            </form>
+        </div>
+    </div>
+    <table>
+        <tr>
+            <br>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Preço (ida)</th>
+        </tr>
+        <?php foreach ($voos as $voo) { ?>
+            <tr>
+                <td>
+                    <?php
+                        $aeroportoOrigem = Aeroporto::find_by_idAeroporto($voo->idaeroportoorigem);
+                        echo $aeroportoOrigem->nome;                        
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($voo->idaeroportodestino);
+                        echo $aeroportoDestino->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo $voo->preco . '€';
+                    ?>
+                </td>
+                <td>
+                    <a href="<?=URL::toRoute('passageiroapp/vervoo', $voo->id) ?>" class="btn btn-primary" role="button">Ver</a>
+                    <a href="<?=URL::toRoute('passagemvendas/createid', $voo->id) ?>" class="btn btn-success" role="button">Comprar (Ida/Volta)</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>

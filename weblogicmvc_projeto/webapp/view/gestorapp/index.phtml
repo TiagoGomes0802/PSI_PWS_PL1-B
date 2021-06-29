@@ -1,0 +1,20 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+use function Composer\Autoload\includeFile;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('gestorvooheader');
+
+?>
+
+<div class="container">
+    <div class="row">
+        <li><a href="<?= URL::toRoute('voo/index')?>">Voos</a></li>
+        <li><a href="<?= URL::toRoute('escala/index')?>">Escalas</a></li>
+        <li><a href="<?= URL::toRoute('plane/index')?>">Aviões</a></li>
+    </div>
+</div>

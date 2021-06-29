@@ -1,0 +1,103 @@
+<?php
+
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('passageiroheader');
+
+
+$voo = Data::get('voo');
+$escalas = Data::get('escalas');
+
+?>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<div class="container">
+    <table>
+        <tr>
+            <th>Origem</th>
+            <th>Data e Hora da Origem</th>
+            <th>Destino</th>
+            <th>Data de chegada ao Destino</th>
+            <th>Hora prevista no Destino</th>
+            <th>Distancia</th>
+        </tr>
+        <?php foreach ($escalas as $escala) { ?>
+            <tr>
+                <td>
+                    <?php
+                        $aeroportoOrigem = Aeroporto::find_by_idAeroporto($escala->idaeroportoorigem);
+                        echo $aeroportoOrigem->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo date_format($escala->data_hora_origem, 'd-m-Y H:i');
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        $aeroportoDestino = Aeroporto::find_by_idAeroporto($escala->idaeroportodestino);
+                        echo $aeroportoDestino->nome;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo date_format($escala->data_hora_destino, 'd-m-Y');
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo date_format($escala->data_hora_destino, 'H:i');
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        echo $escala->distancia;
+                        echo 'Km';
+                    ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+    <div class="row">
+    <br><br>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <p>Distancia Total: <?php echo $voo->distancia . 'Km'; ?></p>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <p>Preço: <?php echo $voo->preco . '€'; ?></p>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <p>Tempo total: <?php 
+                                $minutos = $voo->duracao;
+                                $horas = floor($minutos / 60);
+                                $minutos = $minutos % 60;
+                                echo $horas . 'h ' . $minutos . 'm'; 
+                            ?>
+            </p>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        </div>
+    </div>    
+</div>

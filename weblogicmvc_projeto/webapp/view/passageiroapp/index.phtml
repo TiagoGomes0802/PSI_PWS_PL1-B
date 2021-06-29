@@ -1,0 +1,19 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('passageiroheader');
+
+?>
+
+
+
+<div class="container">
+    <div class="row">
+        <li><a href="<?= URL::toRoute('passageiroapp/comprarvoo')?>">Comprar passagem</a></li>
+        <li><a href="<?= URL::toRoute('passageiroapp/historico')?>">Historico</a></li>
+    </div>
+</div>

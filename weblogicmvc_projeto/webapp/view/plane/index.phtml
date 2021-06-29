@@ -1,0 +1,47 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('gestorvooheader');
+
+$aviao = Data::get('planes');
+
+?>
+
+<style>
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<div class="container">
+    <table>
+        <tr>
+            <th>Modelo</th>
+            <th>Marca</th>
+            <th>Nr Passageiros</th>
+            <th>Referencia</th>
+        </tr>
+        <?php foreach($aviao as $item){ ?>
+            <tr>                
+                <td> <?php echo $item->modelo ?> </a> </td>  
+                <td> <?php echo $item->marca ?> </td>
+                <td> <?php echo $item->npassageiros ?> </td>           
+                <td> <a href="<?=URL::toRoute('plane/show', $item->id) ?> "> <?php echo $item->referencia ?> </td>                             
+            </tr>
+        <?php } ?>
+    </table>
+    <br>   
+    <a href="<?= URL::toRoute('plane/create') ?>" class="btn btn-primary">Criar Avião</a>   
+</div>

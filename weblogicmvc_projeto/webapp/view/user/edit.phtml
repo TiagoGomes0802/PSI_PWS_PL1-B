@@ -1,0 +1,54 @@
+<?php
+use ArmoredCore\WebObjects\Data;
+use ArmoredCore\WebObjects\Debug;
+use ArmoredCore\WebObjects\Layout;
+use ArmoredCore\WebObjects\Post;
+use ArmoredCore\WebObjects\URL;
+
+//***************INCLUIR O LAYOUT*****
+Layout::includeLayout('passageiroheader');
+
+$user = Data::get('user');
+Debug::barDump($user->id);
+?>
+
+<div class="container">
+    <div class="row">
+        <form action="<?= URL::toRoute('user/update', $user->id) ?>" method="post">        
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="primeironome" class="form-label">Primeiro Nome</label>
+                <input type="text" class="form-control" id="primeironome" name="primeironome" value="<?php echo $user->primeironome  ?>">   
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="apelido" class="form-label">Apelido</label>
+                <input type="text" class="form-control" id="apelido" name="apelido" value="<?php echo $user->apelido  ?>">   
+            </div> 
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="telemovel" class="form-label">Telemovel</label>
+                <input type="number" class="form-control" id="telemovel" name="telemovel" value="<?php echo $user->telemovel  ?>">   
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo $user->email  ?>">   
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="morada" class="form-label">Morada</label>
+                <input type="text" class="form-control" id="morada" name="morada" value="<?php echo $user->morada  ?>">  
+            </div>          
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="<?php echo $user->username ?>" disabled>
+            </div>   
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" value="<?php echo $user->password  ?>">   
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <p><i>Não é possivel atualizar o username</i></p>
+            </div>
+            <div class="text-right">                             
+                <button class="btn btn-action" type="submit">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
